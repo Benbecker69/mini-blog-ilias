@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ article.title }} - MiniBlog{% endblock %}
+
+{% block body %}
+<article class="article-detail">
+    <header class="article-header">
+        <h1>{{ article.title }}</h1>
+        <div class="article-meta">
+            <span>Par <strong>{{ article.author.username }}</strong></span>
+            <span>Publié le {{ article.publishedAt|date('d/m/Y à H:i') }}</span>
+        </div>
+
+        {% if is_granted('ARTICLE_EDIT', article) or is_granted('ARTICLE_DELETE', article) %}
+            <div class="article-actions">
+                {% if is_granted('ARTICLE_EDIT', article) %}
+                    <a href="{{ path('app_article_edit', {id: article.id}) }}" class="btn btn-secondary">Modifier</a>
+                {% endif %}
+                {% if is_granted('ARTICLE_DELETE', article) %}
+                    <form method="post" action="{{ path('app_article_delete', {id: article.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?');" style="display:inline;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </form>
+                {% endif %}
+            </div>
+        {% endif %}
+    </header>
+
+    <div class="article-content">
+        {{ article.content|nl2br }}
+    </div>
+</article>
+
+<section class="comments-section">
+    <h2>Commentaires ({{ article.comments|length }})</h2>
+
+    {% if app.user and comment_form %}
+        <div class="comment-form-container">
+            <h3>Ajouter un commentaire</h3>
+            {{ form_start(comment_form, {'attr': {'class': 'comment-form'}}) }}
+                <div class="form-group">
+                    {{ form_widget(comment_form.content) }}
+                    {{ form_errors(comment_form.content) }}
+                </div>
+                <button type="submit" class="btn btn-primary">Publier</button>
+            {{ form_end(comment_form) }}
+        </div>
+    {% elseif not app.user %}
+        <p class="auth-notice">
+            Vous devez être <a href="{{ path('app_login') }}">connecté</a> pour laisser un commentaire.
+        </p>
+    {% endif %}
+
+    <div class="comments-list">
+        {% for comment in article.comments|sort((a, b) => b.createdAt <=> a.createdAt) %}
+            <div class="comment">
+                <div class="comment-header">
+                    <strong>{{ comment.author.username }}</strong>
+                    <span class="comment-date">{{ comment.createdAt|date('d/m/Y à H:i') }}</span>
+                    {% if is_granted('COMMENT_DELETE', comment) %}
+                        <form method="post" action="{{ path('app_comment_delete', {id: comment.id}) }}" onsubmit="return confirm('Supprimer ce commentaire ?');" style="display:inline;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
+                            <button type="submit" class="btn-link-danger">Supprimer</button>
+                        </form>
+                    {% endif %}
+                </div>
+                <div class="comment-content">
+                    {{ comment.content|nl2br }}
+                </div>
+            </div>
+        {% else %}
+            <p>Aucun commentaire pour le moment. Soyez le premier à commenter !</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

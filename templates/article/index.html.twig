@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - MiniBlog{% endblock %}
+
+{% block body %}
+<div class="home-hero">
+    <h1>Bienvenue sur MiniBlog</h1>
+    <p>Découvrez nos derniers articles</p>
+</div>
+
+<div class="articles-grid">
+    {% for article in articles %}
+        <article class="article-card">
+            <h2><a href="{{ path('app_article_show', {slug: article.slug}) }}">{{ article.title }}</a></h2>
+            <div class="article-meta">
+                <span>Par {{ article.author.username }}</span>
+                <span>{{ article.publishedAt|date('d/m/Y') }}</span>
+            </div>
+            <p>{{ article.excerpt }}</p>
+            <a href="{{ path('app_article_show', {slug: article.slug}) }}" class="btn btn-secondary">Lire la suite →</a>
+        </article>
+    {% else %}
+        <p>Aucun article disponible pour le moment.</p>
+    {% endfor %}
+</div>
+
+{% if pages_count > 1 %}
+    <nav class="pagination">
+        {% if current_page > 1 %}
+            <a href="{{ path('app_home', {page: current_page - 1, sort: sort_field, dir: sort_direction}) }}">&laquo; Précédent</a>
+        {% endif %}
+
+        {% for i in 1..pages_count %}
+            <a href="{{ path('app_home', {page: i, sort: sort_field, dir: sort_direction}) }}"
+               class="{% if i == current_page %}active{% endif %}">{{ i }}</a>
+        {% endfor %}
+
+        {% if current_page < pages_count %}
+            <a href="{{ path('app_home', {page: current_page + 1, sort: sort_field, dir: sort_direction}) }}">Suivant &raquo;</a>
+        {% endif %}
+    </nav>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier "{{ article.title }}" - MiniBlog{% endblock %}
+
+{% block body %}
+<div class="form-container">
+    <h1>Modifier l'article</h1>
+
+    {{ form_start(article_form, {'attr': {'class': 'article-form'}}) }}
+        <div class="form-group">
+            {{ form_label(article_form.title) }}
+            {{ form_widget(article_form.title) }}
+            {{ form_errors(article_form.title) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(article_form.content) }}
+            {{ form_widget(article_form.content) }}
+            {{ form_errors(article_form.content) }}
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <a href="{{ path('app_article_show', {slug: article.slug}) }}" class="btn btn-secondary">Annuler</a>
+        </div>
+    {{ form_end(article_form) }}
+</div>
+{% endblock %}

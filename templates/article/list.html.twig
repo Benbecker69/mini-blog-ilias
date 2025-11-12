@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tous les articles - MiniBlog{% endblock %}
+
+{% block body %}
+<div class="page-header">
+    <h1>Tous les articles</h1>
+    <div class="sort-links">
+        <span>Trier par :</span>
+        <a href="{{ path('app_article_list', {sort: 'createdAt', dir: 'desc'}) }}"
+           class="{% if sort_field == 'createdAt' %}active{% endif %}">Date</a>
+        <a href="{{ path('app_article_list', {sort: 'title', dir: 'asc'}) }}"
+           class="{% if sort_field == 'title' %}active{% endif %}">Titre</a>
+    </div>
+</div>
+
+<div class="articles-list">
+    {% for article in articles %}
+        <article class="article-item">
+            <h2><a href="{{ path('app_article_show', {slug: article.slug}) }}">{{ article.title }}</a></h2>
+            <div class="article-meta">
+                <span>Par {{ article.author.username }}</span>
+                <span>{{ article.publishedAt|date('d/m/Y à H:i') }}</span>
+                <span>{{ article.comments|length }} commentaire(s)</span>
+            </div>
+            <p>{{ article.excerpt }}</p>
+        </article>
+    {% else %}
+        <p>Aucun article disponible.</p>
+    {% endfor %}
+</div>
+
+{% if pages_count > 1 %}
+    <nav class="pagination">
+        {% if current_page > 1 %}
+            <a href="{{ path('app_article_list', {page: current_page - 1, sort: sort_field, dir: sort_direction}) }}">&laquo; Précédent</a>
+        {% endif %}
+
+        {% for i in 1..pages_count %}
+            <a href="{{ path('app_article_list', {page: i, sort: sort_field, dir: sort_direction}) }}"
+               class="{% if i == current_page %}active{% endif %}">{{ i }}</a>
+        {% endfor %}
+
+        {% if current_page < pages_count %}
+            <a href="{{ path('app_article_list', {page: current_page + 1, sort: sort_field, dir: sort_direction}) }}">Suivant &raquo;</a>
+        {% endif %}
+    </nav>
+{% endif %}
+{% endblock %}

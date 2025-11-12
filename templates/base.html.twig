@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MiniBlog{% endblock %}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>">
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    {% endblock %}
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="{{ path('app_home') }}" class="logo">📝 MiniBlog</a>
+                <ul class="nav-links">
+                    <li><a href="{{ path('app_home') }}">Accueil</a></li>
+                    <li><a href="{{ path('app_article_list') }}">Articles</a></li>
+                    {% if app.user %}
+                        <li><a href="{{ path('app_article_new') }}">Nouvel article</a></li>
+                        <li class="user-menu">
+                            <span>👤 {{ app.user.username }}</span>
+                            <form method="post" action="{{ path('app_logout') }}" style="display:inline;">
+                                <button type="submit" class="btn btn-link">Déconnexion</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li><a href="{{ path('app_login') }}">Connexion</a></li>
+                        <li><a href="{{ path('app_register') }}">Inscription</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            {% include '_flash_messages.html.twig' %}
+            {% block body %}{% endblock %}
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; {{ 'now'|date('Y') }} MiniBlog - Projet Symfony 7</p>
+            <p><small>Fait avec ❤️ et Symfony</small></p>
+        </div>
+    </footer>
+
+    {% block javascripts %}
+    {% endblock %}
+</body>
+</html>
