@@ -230,15 +230,3 @@ php bin/console debug:container
 # Voir la configuration de sécurité
 php bin/console debug:firewall
 ```
-
-## Auteur
-
-Projet développé avec Symfony 7 dans le cadre d'un exercice pédagogique.
-
-## Licence
-
-Projet éducatif - Libre d'utilisation
-
----
-
-Fait avec ❤️ et Symfony 7

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Erreur serveur - MiniBlog{% endblock %}
+{% block title %}Erreur - MiniBlog{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -15,23 +15,17 @@
             text-align: center;
         }
         .error-icon {
-            font-size: 5rem;
+            font-size: 4rem;
             margin-bottom: calc(var(--spacing) * 3);
-            animation: shake 3s infinite;
-        }
-        @keyframes shake {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-5deg); }
-            75% { transform: rotate(5deg); }
         }
         .error-code {
-            font-size: 6rem;
+            font-size: 4rem;
             margin-bottom: calc(var(--spacing) * 2);
-            color: var(--danger-color);
+            color: var(--secondary-color);
             font-weight: 700;
         }
         .error-title {
-            font-size: 2rem;
+            font-size: 1.75rem;
             margin-bottom: calc(var(--spacing) * 2);
             color: var(--primary-color);
             font-weight: 600;
@@ -53,7 +47,7 @@
                 padding: calc(var(--spacing) * 4);
             }
             .error-code {
-                font-size: 4rem;
+                font-size: 3rem;
             }
             .error-title {
                 font-size: 1.5rem;
@@ -70,10 +64,10 @@
 
 {% block body %}
     <div class="error-page">
-        <div class="error-icon">⚙️</div>
-        <div class="error-code">500</div>
-        <h1 class="error-title">Erreur serveur</h1>
-        <p class="error-message">Oups ! Une erreur s'est produite sur le serveur. Nos équipes ont été notifiées et travaillent à résoudre le problème.</p>
+        <div class="error-icon">⚠️</div>
+        <div class="error-code">Oups !</div>
+        <h1 class="error-title">Une erreur est survenue</h1>
+        <p class="error-message">Nous sommes désolés, quelque chose s'est mal passé. Nos équipes ont été notifiées et travaillent à résoudre le problème.</p>
         <div class="error-actions">
             <a href="{{ path('app_home') }}" class="btn btn-primary">Retour à l'accueil</a>
             <a href="javascript:history.back()" class="btn btn-secondary">Page précédente</a>
